@@ -52,7 +52,7 @@ const register: React.FC<registerProps> = ({}) => {
               type="submit"
               isLoading={isSubmitting}
             >
-              Submit
+              Create An Account
             </Button>
           </Form>
         )}
