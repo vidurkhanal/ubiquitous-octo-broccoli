@@ -1,4 +1,3 @@
-import "../styles/globals.css";
 import { ChakraProvider, CSSReset } from "@chakra-ui/react";
 import { createClient, Provider } from "urql";
 
