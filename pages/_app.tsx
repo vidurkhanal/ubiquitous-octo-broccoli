@@ -1,5 +1,21 @@
 import { ChakraProvider, CSSReset } from "@chakra-ui/react";
-import { createClient, Provider } from "urql";
+import { cacheExchange, Cache, QueryInput } from "@urql/exchange-graphcache";
+import { createClient, dedupExchange, fetchExchange, Provider } from "urql";
+import {
+  LoginMutation,
+  MyselfDocument,
+  MyselfQuery,
+  RegisterMutation,
+} from "../generated/graphql";
+
+function betterUpdateQuery<Result, Query>(
+  cache: Cache,
+  qi: QueryInput,
+  result: any,
+  fn: (e: Result, q: Query) => Query
+) {
+  return cache.updateQuery(qi, (data) => fn(result, data as any) as any);
+}
 
 function MyApp({ Component, pageProps }) {
   const client = createClient({
@@ -7,6 +23,48 @@ function MyApp({ Component, pageProps }) {
     fetchOptions: {
       credentials: "include",
     },
+    exchanges: [
+      dedupExchange,
+      cacheExchange({
+        updates: {
+          Mutation: {
+            login: (_result, args, cache, info) => {
+              betterUpdateQuery<LoginMutation, MyselfQuery>(
+                cache,
+                { query: MyselfDocument },
+                _result,
+                (result, query) => {
+                  if (result.login.error) {
+                    return query;
+                  } else {
+                    return {
+                      me: result.login.user,
+                    };
+                  }
+                }
+              );
+            },
+            register: (_result, args, cache, info) => {
+              betterUpdateQuery<RegisterMutation, MyselfQuery>(
+                cache,
+                { query: MyselfDocument },
+                _result,
+                (result, query) => {
+                  if (result.RegisterUser.error) {
+                    return query;
+                  } else {
+                    return {
+                      me: result.RegisterUser.user,
+                    };
+                  }
+                }
+              );
+            },
+          },
+        },
+      }),
+      fetchExchange,
+    ],
   });
 
   return (
