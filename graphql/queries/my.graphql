@@ -1,0 +1,6 @@
+query myself {
+  me {
+    id
+    username
+  }
+}

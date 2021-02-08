@@ -131,9 +131,20 @@ export type RegisterMutation = (
       & Pick<FieldError, 'field' | 'message'>
     )>>, user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'username' | 'createdAt'>
+      & Pick<User, 'id' | 'username' | 'createdAt'>
     )> }
   ) }
+);
+
+export type MyselfQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyselfQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  )> }
 );
 
 
@@ -164,6 +175,7 @@ export const RegisterDocument = gql`
       message
     }
     user {
+      id
       username
       createdAt
     }
@@ -173,4 +185,16 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const MyselfDocument = gql`
+    query myself {
+  me {
+    id
+    username
+  }
+}
+    `;
+
+export function useMyselfQuery(options: Omit<Urql.UseQueryArgs<MyselfQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyselfQuery>({ query: MyselfDocument, ...options });
 };
