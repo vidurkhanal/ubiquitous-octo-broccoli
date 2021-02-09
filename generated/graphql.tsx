@@ -156,6 +156,17 @@ export type MyselfQuery = (
   )> }
 );
 
+export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PostsQuery = (
+  { __typename?: 'Query' }
+  & { AllPosts: Array<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'title' | 'createdAt'>
+  )> }
+);
+
 
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
@@ -215,4 +226,17 @@ export const MyselfDocument = gql`
 
 export function useMyselfQuery(options: Omit<Urql.UseQueryArgs<MyselfQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MyselfQuery>({ query: MyselfDocument, ...options });
+};
+export const PostsDocument = gql`
+    query Posts {
+  AllPosts {
+    id
+    title
+    createdAt
+  }
+}
+    `;
+
+export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });
 };
