@@ -3,6 +3,7 @@ import { cacheExchange, Cache, QueryInput } from "@urql/exchange-graphcache";
 import { createClient, dedupExchange, fetchExchange, Provider } from "urql";
 import {
   LoginMutation,
+  LogoutMutation,
   MyselfDocument,
   MyselfQuery,
   RegisterMutation,
@@ -28,6 +29,14 @@ function MyApp({ Component, pageProps }) {
       cacheExchange({
         updates: {
           Mutation: {
+            logout: (_result, args, cache, info) => {
+              betterUpdateQuery<LogoutMutation, MyselfQuery>(
+                cache,
+                { query: MyselfDocument },
+                _result,
+                () => ({ me: null })
+              );
+            },
             login: (_result, args, cache, info) => {
               betterUpdateQuery<LoginMutation, MyselfQuery>(
                 cache,
