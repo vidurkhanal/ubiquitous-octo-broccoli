@@ -13,10 +13,12 @@ function Home() {
       </Head>
       <Navbar />
       <ul>
-        {data ? data.AllPosts.map((post) => <li>{post.title}</li>) : null}
+        {data
+          ? data.AllPosts.map((post) => <li key={post.id}>{post.title}</li>)
+          : null}
       </ul>
     </div>
   );
 }
 
-export default withUrqlClient(createUrqlClient)(Home);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Home);

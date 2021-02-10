@@ -4,9 +4,15 @@ import { useLogoutMutation, useMyselfQuery } from "../generated/graphql";
 
 interface NavbarProps {}
 
+const isServer = () => {
+  return typeof window === "undefined";
+};
+
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMyselfQuery();
+  const [{ data, fetching }] = useMyselfQuery({
+    pause: isServer(),
+  });
   let body;
   if (fetching) {
     body = null;

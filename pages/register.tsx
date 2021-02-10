@@ -6,6 +6,8 @@ import { useRegisterMutation } from "../generated/graphql";
 import toErrorMap from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface registerProps {}
 
@@ -61,4 +63,4 @@ const register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default register;
+export default withUrqlClient(createUrqlClient)(register);
