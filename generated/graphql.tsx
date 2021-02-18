@@ -49,6 +49,8 @@ export type Mutation = {
   CreatePost: Post;
   UpdatePost: Post;
   DeletePost: Scalars['Boolean'];
+  changePassword: AuthResponse;
+  forgotPwd: Scalars['Boolean'];
   RegisterUser: AuthResponse;
   login: AuthResponse;
   logout: Scalars['Boolean'];
@@ -68,6 +70,17 @@ export type MutationUpdatePostArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type MutationForgotPwdArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -96,6 +109,26 @@ export type EmailPasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type ChangePasswordMutationVariables = Exact<{
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ChangePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { changePassword: (
+    { __typename?: 'AuthResponse' }
+    & { error?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    )> }
+  ) }
+);
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -168,6 +201,24 @@ export type PostsQuery = (
 );
 
 
+export const ChangePasswordDocument = gql`
+    mutation changePassword($token: String!, $newPassword: String!) {
+  changePassword(token: $token, newPassword: $newPassword) {
+    error {
+      field
+      message
+    }
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+
+export function useChangePasswordMutation() {
+  return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
   login(options: {username: $username, password: $password}) {
