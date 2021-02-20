@@ -1,13 +1,14 @@
 import { Formik, Form } from "formik";
 import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Link } from "@chakra-ui/react";
 import { useRegisterMutation } from "../generated/graphql";
 import toErrorMap from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import NextLink from "next/link";
 
 interface registerProps {}
 
@@ -59,6 +60,9 @@ const register: React.FC<registerProps> = ({}) => {
           </Form>
         )}
       </Formik>
+      <NextLink href="/login">
+        <Link color="blackAlpha.900">Already Have An Account !?</Link>
+      </NextLink>
     </Wrapper>
   );
 };
