@@ -9,10 +9,16 @@ import { useState } from "react";
 import { GOOGLE_RECAPTCHA_KEY } from "../keys";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useToast } from "@chakra-ui/react";
+import { useForgotPasswordMutation } from "../generated/graphql";
+import { useRouter } from "next/router";
 
 interface forgotPasswordProps {}
 
 const ForgotPassword: React.FC<forgotPasswordProps> = ({}) => {
+  const [, forgotPassword] = useForgotPasswordMutation();
+  const toast = useToast();
+  const router = useRouter();
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
   const onSucessfulCaptch = () => {
     setDisableSubmit(false);
@@ -24,8 +30,18 @@ const ForgotPassword: React.FC<forgotPasswordProps> = ({}) => {
       </Head>
       <Formik
         initialValues={{ username: "" }}
-        onSubmit={async (val, { setErrors }) => {
-          console.log("Submitted!!!");
+        onSubmit={async (val) => {
+          await forgotPassword({ email: val.username });
+          toast({
+            title: "Password Request",
+            description: "Please check your email for further instructions.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+          setTimeout(() => {
+            router.reload();
+          }, 9000);
         }}
       >
         {({ isSubmitting }) => (
