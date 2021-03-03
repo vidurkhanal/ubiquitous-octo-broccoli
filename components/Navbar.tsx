@@ -46,7 +46,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     );
   }
   return (
-    <Flex bg="twitter.600" height="50px" alignItems="center" pr="3">
+    <Flex
+      zIndex={1}
+      position="sticky"
+      top={0}
+      bg="twitter.600"
+      height="50px"
+      alignItems="center"
+      pr="3"
+    >
       <Box ml="auto">{body}</Box>
     </Flex>
   );
