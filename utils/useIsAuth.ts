@@ -7,7 +7,7 @@ export const useIsAuth = () => {
   const [{ data, fetching }] = useMyselfQuery();
   useEffect(() => {
     if (!fetching && !data?.me) {
-      router.push("/login");
+      router.push("/login?next=" + router.pathname);
     }
   }, [fetching, data, router]);
 };
