@@ -1,7 +1,10 @@
-query Posts {
-  AllPosts {
+query Posts($limit: Int!, $cursor: String) {
+  AllPosts(limit: $limit, cursor: $cursor) {
     id
     title
+    content
     createdAt
+    updatedAt
+    creatorID
   }
 }

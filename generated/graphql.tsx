@@ -24,6 +24,12 @@ export type Query = {
 };
 
 
+export type QueryAllPostsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
 export type QueryPostByIdArgs = {
   id: Scalars['Float'];
 };
@@ -220,14 +226,17 @@ export type MyselfQuery = (
   )> }
 );
 
-export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type PostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type PostsQuery = (
   { __typename?: 'Query' }
   & { AllPosts: Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'createdAt'>
+    & Pick<Post, 'id' | 'title' | 'content' | 'createdAt' | 'updatedAt' | 'creatorID'>
   )> }
 );
 
@@ -335,11 +344,14 @@ export function useMyselfQuery(options: Omit<Urql.UseQueryArgs<MyselfQueryVariab
   return Urql.useQuery<MyselfQuery>({ query: MyselfDocument, ...options });
 };
 export const PostsDocument = gql`
-    query Posts {
-  AllPosts {
+    query Posts($limit: Int!, $cursor: String) {
+  AllPosts(limit: $limit, cursor: $cursor) {
     id
     title
+    content
     createdAt
+    updatedAt
+    creatorID
   }
 }
     `;
