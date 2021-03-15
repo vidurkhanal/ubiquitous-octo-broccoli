@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   } else {
     body = (
       <Flex>
-        <Text as="h5" fontWeight="600" mr={5} cursor="pointer">
+        <Text as="h5" fontWeight="600" mr={5} cursor="pointer" color="white">
           {data.me.username}
         </Text>
         <Button
@@ -39,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           }}
           isLoading={logoutFetching}
           variant="link"
+          colorScheme="messenger"
         >
           Logout{" "}
         </Button>
@@ -50,8 +51,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       zIndex={1}
       position="sticky"
       top={0}
-      bg="twitter.600"
-      height="50px"
+      bg="whatsapp.400"
+      height="60px"
       alignItems="center"
       pr="3"
     >
